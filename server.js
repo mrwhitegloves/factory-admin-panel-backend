@@ -18,7 +18,7 @@ const io = socketIo(server, {
 });
 
 app.use(cors({
-  origin: 'http://localhost:8080',           // ← your frontend URL (Vite default)
+  origin: ['http://localhost:8080', 'https://factory-admin-panel-phi.vercel.app'],           // ← your frontend URL (Vite default)
   credentials: true,                         // ← VERY IMPORTANT
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
