@@ -7,6 +7,7 @@ router.use(authMiddleware.protect);
 
 router.post('/scan', itemController.scanItem); // For operators: start/complete/reject
 router.get('/current/:stage', authMiddleware.operatorOnly, itemController.getItemsInStage);
+router.get('/', itemController.getItemsByOrder);
 router.get('/:id', authMiddleware.adminOrSupervisor, itemController.getItemById);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const Item = require('../models/Item');
 const Stage = require('../models/Stage');
 const timeUtils = require('../utils/timeUtils');
+const Order = require('../models/Order');
 
 exports.scanItem = async (req, res, next) => {
   try {
@@ -71,6 +72,17 @@ exports.getItemById = async (req, res, next) => {
     if (!item) return res.status(404).json({ message: 'Item not found' });
     res.json(item);
   } catch (err) {
+    next(err);
+  }
+};
+
+exports.getItemsByOrder = async (req, res, next) => {
+  try {
+    const { order_id } = req.query;
+    const items = await Order.find({ order_id });
+    res.json(items);
+  } catch (err) {
+    console.log("error in getItemByOrder: ".err)
     next(err);
   }
 };
