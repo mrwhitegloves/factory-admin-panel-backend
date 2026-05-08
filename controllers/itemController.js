@@ -12,13 +12,17 @@ exports.scanItem = async (req, res, next) => {
     const stages = await Stage.find().sort('order');
     const currentIndex = stages.findIndex(s => s.name === item.current_stage);
 
+    // Record QR scan timestamp (Engenx Traceability — time-stamped digital record)
+    item.scanned_at = new Date();
+
     switch (action) {
       case 'start':
         item.stage_history.push({
           stage_name: item.current_stage,
           entry_time: new Date(),
           operator,
-          remarks: remark
+          remarks: remark,
+          scanned_at: new Date()
         });
         break;
       case 'complete':
@@ -34,11 +38,16 @@ exports.scanItem = async (req, res, next) => {
         break;
       case 'reject':
         item.status = 'Rejected';
+        item.validation_status = 'Failed';
         item.stage_history[item.stage_history.length - 1].remarks = remark || 'Rejected';
         break;
       case 'hold':
         item.status = 'On Hold';
         item.stage_history[item.stage_history.length - 1].remarks = remark || 'On Hold';
+        break;
+      case 'validate':
+        // In-process quality validation checkpoint (Engenx — quality control at source)
+        item.validation_status = remark === 'fail' ? 'Failed' : 'Passed';
         break;
       default:
         return res.status(400).json({ message: 'Invalid action' });
@@ -46,7 +55,6 @@ exports.scanItem = async (req, res, next) => {
 
     await item.save();
 
-    // Prevent stage skipping: Ensured by index check
     // Emit real-time update
     global.io.to('supervisor').emit('itemUpdate', { updatedItem: item });
     global.io.to('admin').emit('itemUpdate', { updatedItem: item });
@@ -76,13 +84,14 @@ exports.getItemById = async (req, res, next) => {
   }
 };
 
+// FIX: was incorrectly querying Order model — now correctly queries Item model
 exports.getItemsByOrder = async (req, res, next) => {
   try {
     const { order_id } = req.query;
-    const items = await Order.find({ order_id });
+    const items = await Item.find({ order_id });
     res.json(items);
   } catch (err) {
-    console.log("error in getItemByOrder: ".err)
+    console.error('Error in getItemsByOrder:', err);
     next(err);
   }
 };
