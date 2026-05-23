@@ -18,8 +18,15 @@ const io = socketIo(server, {
 });
 
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://factory-admin-panel-phi.vercel.app', 'https://id-preview--1d3aa0eb-1a49-49d7-b5bd-227f097ccaf2.lovable.app'],           // ← your frontend URL (Vite default)
-  credentials: true,                         // ← VERY IMPORTANT
+  origin: [
+    'http://localhost:8080',
+    'http://localhost:8081',
+    'http://localhost:8082',
+    'http://localhost:5173',
+    'https://factory-admin-panel-phi.vercel.app',
+    'https://id-preview--1d3aa0eb-1a49-49d7-b5bd-227f097ccaf2.lovable.app',
+  ],
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -39,6 +46,9 @@ app.use('/api/items', require('./routes/items'));
 app.use('/api/stages', require('./routes/stages'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/reports', require('./routes/reports'));
+
+// RSB — Under Carriage / Track Frame Tracking
+app.use('/api/rsb', require('./routes/rsb'));
 
 // Error Middleware (last)
 app.use(require('./middlewares/errorMiddleware'));
@@ -76,6 +86,6 @@ global.io = io; // Make io accessible in controllers/services
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-    // seedStages();
+  console.log(`Server running on port ${PORT}`)
+  // seedStages();
 });
