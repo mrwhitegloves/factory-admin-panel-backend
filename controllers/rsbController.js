@@ -5,7 +5,10 @@ const RSBComponent = require('../models/RSBComponent');
 const qrUtils      = require('../utils/qrUtils');
 const { STAGE_DEFINITIONS, COMPONENT_DISPLAY_NAMES } = require('../utils/rsbStages');
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
+let FRONTEND_URL = process.env.FRONTEND_URL || 'https://factory-admin-panel-phi.vercel.app';
+if (!FRONTEND_URL || FRONTEND_URL.includes('localhost:8080')) {
+  FRONTEND_URL = 'https://factory-admin-panel-phi.vercel.app';
+}
 
 // Helper: format today as YYMMDD
 const getDatePart = () => {

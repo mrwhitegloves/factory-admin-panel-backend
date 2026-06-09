@@ -24,6 +24,7 @@ app.use(cors({
     'http://localhost:8082',
     'http://localhost:5173',
     'https://factory-admin-panel-phi.vercel.app',
+    'https://plantbrain.engenx.in',
     'https://id-preview--1d3aa0eb-1a49-49d7-b5bd-227f097ccaf2.lovable.app',
   ],
   credentials: true,
@@ -88,4 +89,4 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
   // seedStages();
-});
+}); // Force restart to apply new FRONTEND_URL environment variables
