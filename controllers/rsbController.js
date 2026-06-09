@@ -5,9 +5,9 @@ const RSBComponent = require('../models/RSBComponent');
 const qrUtils      = require('../utils/qrUtils');
 const { STAGE_DEFINITIONS, COMPONENT_DISPLAY_NAMES } = require('../utils/rsbStages');
 
-let FRONTEND_URL = process.env.FRONTEND_URL || 'https://factory-admin-panel-phi.vercel.app';
+let FRONTEND_URL = process.env.FRONTEND_URL || 'https://plantbrain.engenx.in';
 if (!FRONTEND_URL || FRONTEND_URL.includes('localhost:8080')) {
-  FRONTEND_URL = 'https://factory-admin-panel-phi.vercel.app';
+  FRONTEND_URL = 'https://plantbrain.engenx.in';
 }
 
 // Helper: format today as YYMMDD
